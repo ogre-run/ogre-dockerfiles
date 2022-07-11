@@ -1,0 +1,5 @@
+FROM ubuntu:22.04
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt update && apt install -y python3-dev python3-pip ffmpeg libsm6 libxext6 vim git
+RUN pip install jupyterlab
