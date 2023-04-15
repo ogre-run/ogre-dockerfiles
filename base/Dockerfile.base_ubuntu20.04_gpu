@@ -8,3 +8,5 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
         ln -s /opt/poetry/bin/poetry && \
             poetry config virtualenvs.create false
 RUN pip install jupyterlab
+RUN mkdir -p /usr/local/share/jupyter/lab/settings
+COPY ./overrides.json /usr/local/share/jupyter/lab/settings/
