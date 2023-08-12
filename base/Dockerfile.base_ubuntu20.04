@@ -2,7 +2,9 @@ FROM ubuntu:20.04
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update && apt install -y python3-dev python3-pip python-is-python3 \
-                                 ffmpeg libsm6 libxext6 vim git curl
+                                 ffmpeg libsm6 libxext6 vim git curl rustc cargo
+# Upgrade pip
+RUN pip install --upgrade pip
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 && \
     cd /usr/local/bin && \
