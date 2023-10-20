@@ -1,24 +1,23 @@
 #!/bin/bash
 
 OS="linux"
+REPO="ogrerun"
 
-for PLATFORM in "amd64"
+
+# CPU - Building the base dockers for multiplatforms
+for UBUNTU_VERSION in "20.04" "22.04"
 do
-    # Build baseimage standard ubuntu22.04 - CPU
-    docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu22.04-$PLATFORM -f ./Dockerfile.base_ubuntu22.04 .
-    docker push ogarantia/ogre:base-ubuntu22.04-$PLATFORM
-    # Build baseimage standard ubuntu22.04 - GPU
-    docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu22.04-gpu-$PLATFORM -f ./Dockerfile.base_ubuntu22.04_gpu .
-    docker push ogarantia/ogre:base-ubuntu22.04-gpu-$PLATFORM
-    # Build baseimage standard ubuntu20.04 - CPU
-    docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu20.04-$PLATFORM -f ./Dockerfile.base_ubuntu20.04 .
-    docker push ogarantia/ogre:base-ubuntu20.04-$PLATFORM
-    # Build baseimage standard ubuntu20.04 - GPU
-    docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu20.04-gpu-$PLATFORM -f ./Dockerfile.base_ubuntu20.04_gpu .
-    docker push ogarantia/ogre:base-ubuntu20.04-gpu-$PLATFORM
-    # Build baseimage standard ubuntu18.04 - CPU
-    # docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu18.04-$PLATFORM -f ./Dockerfile.base_ubuntu18.04 .
-    # Build baseimage standard ubuntu18.04 - GPU
-    # docker buildx build --platform $OS/$PLATFORM -t ogarantia/ogre:base-ubuntu18.04-gpu-$PLATFORM -f ./Dockerfile.base_ubuntu18.04_gpu .
+    for PLATFORM in "amd64" "arm64"
+    do
+        docker buildx build --platform $OS/$PLATFORM --load -t ogrerun/base:ubuntu${UBUNTU_VERSION}-${PLATFORM} -f ./Dockerfile.base-ubuntu${UBUNTU_VERSION} .
+    done
+done
 
+# GPU - Building the base dockers for multiplatforms
+for UBUNTU_VERSION in "20.04" "22.04"
+do
+    for PLATFORM in "amd64" "arm64"
+    do
+        docker buildx build --platform $OS/$PLATFORM --load -t ogrerun/base:ubuntu${UBUNTU_VERSION}-${PLATFORM}-gpu -f ./Dockerfile.base-ubuntu${UBUNTU_VERSION}-gpu .
+    done
 done
